@@ -12,206 +12,323 @@ export const CATEGORIES = [
   { id: 'acessorios', label: 'Acessórios' },
 ];
 
+// Taxas ELLO conforme imagem (Coluna 2)
+// O cálculo usado é: Valor / (1 - (Taxa/100)) para garantir o recebimento do valor à vista.
+export const ELLO_RATES: Record<number, number> = {
+  1: 4.05,
+  2: 5.12,
+  3: 5.79,
+  4: 6.47,
+  5: 7.15,
+  6: 7.83,
+  7: 8.94,
+  8: 9.62,
+  9: 10.29,
+  10: 10.97,
+  11: 11.64,
+  12: 12.32,
+  13: 12.99,
+  14: 13.67,
+  15: 14.34,
+  16: 15.02,
+  17: 15.69,
+  18: 16.37
+};
+
+/**
+ * Calcula o valor total parcelado com base na quantidade de parcelas.
+ * Para 1-18x usa a tabela ELLO.
+ * Para 19-21x usa o fator padrão da loja (proporcional ao preço de 21x).
+ */
+export const calculateInstallmentTotal = (cashAmount: number, n: number, productFactor21x: number) => {
+  if (n === 0) return cashAmount; // Pix/Dinheiro
+  
+  if (n <= 18) {
+    const rate = ELLO_RATES[n];
+    return Number((cashAmount / (1 - (rate / 100))).toFixed(2));
+  }
+  
+  // Para 19, 20 e 21 mantemos o padrão de fator baseado no preço de 21x
+  // Fator = Preço21x / PreçoCash
+  return Number((cashAmount * productFactor21x).toFixed(2));
+};
+
 export const TRADE_IN_DATA: TradeInModel[] = [
   {
     model: 'iPhone 11',
     capacities: [
-      { size: '64GB', gradeA: 700, gradeB: 600 },
-      { size: '128GB', gradeA: 800, gradeB: 700 },
+      { size: '64GB', gradeA: 700, gradeB: 500 },
+      { size: '128GB', gradeA: 800, gradeB: 600 },
+      { size: '256GB', gradeA: 900, gradeB: 700 },
+    ]
+  },
+  {
+    model: 'iPhone 11 Pro',
+    capacities: [
+      { size: '64GB', gradeA: 1000, gradeB: 750 },
+      { size: '256GB', gradeA: 1100, gradeB: 850 },
+      { size: '512GB', gradeA: 1200, gradeB: 950 },
     ]
   },
   {
     model: 'iPhone 11 Pro Max',
     capacities: [
-      { size: '64GB', gradeA: 1200, gradeB: 1000 },
+      { size: '64GB', gradeA: 1100, gradeB: 850 },
       { size: '256GB', gradeA: 1300, gradeB: 1050 },
+      { size: '512GB', gradeA: 1400, gradeB: 1150 },
     ]
   },
   {
     model: 'iPhone 12',
     capacities: [
-      { size: '64GB', gradeA: 1000, gradeB: 900 },
-      { size: '128GB', gradeA: 1150, gradeB: 1050 },
+      { size: '64GB', gradeA: 1000, gradeB: 800 },
+      { size: '128GB', gradeA: 1100, gradeB: 900 },
+      { size: '256GB', gradeA: 1200, gradeB: 1000 },
     ]
   },
   {
     model: 'iPhone 12 Pro',
     capacities: [
-      { size: '128GB', gradeA: 1550, gradeB: 1350 },
-      { size: '256GB', gradeA: 1650, gradeB: 1450 },
+      { size: '128GB', gradeA: 1350, gradeB: 1100 },
+      { size: '256GB', gradeA: 1450, gradeB: 1200 },
+      { size: '512GB', gradeA: 1550, gradeB: 1300 },
     ]
   },
   {
     model: 'iPhone 12 Pro Max',
     capacities: [
-      { size: '128GB', gradeA: 2000, gradeB: 1800 },
-      { size: '256GB', gradeA: 2100, gradeB: 1900 },
+      { size: '128GB', gradeA: 1930, gradeB: 1680 },
+      { size: '256GB', gradeA: 2030, gradeB: 1780 },
+      { size: '512GB', gradeA: 2130, gradeB: 1880 },
     ]
   },
   {
     model: 'iPhone 13',
     capacities: [
-      { size: '128GB', gradeA: 1650, gradeB: 1550 },
-      { size: '256GB', gradeA: 1700, gradeB: 1650 },
+      { size: '128GB', gradeA: 1700, gradeB: 1500 },
+      { size: '256GB', gradeA: 1800, gradeB: 1600 },
+      { size: '512GB', gradeA: 1900, gradeB: 1700 },
     ]
   },
   {
     model: 'iPhone 13 Pro',
     capacities: [
-      { size: '128GB', gradeA: 2000, gradeB: 1800 },
-      { size: '256GB', gradeA: 2100, gradeB: 1850 },
+      { size: '128GB', gradeA: 2040, gradeB: 1790 },
+      { size: '256GB', gradeA: 2200, gradeB: 1950 },
+      { size: '512GB', gradeA: 2300, gradeB: 2050 },
+      { size: '1TB', gradeA: 2400, gradeB: 2150 },
     ]
   },
   {
     model: 'iPhone 13 Pro Max',
     capacities: [
-      { size: '128GB', gradeA: 2250, gradeB: 2150 },
-      { size: '256GB', gradeA: 2350, gradeB: 2200 },
+      { size: '128GB', gradeA: 2340, gradeB: 2090 },
+      { size: '256GB', gradeA: 2440, gradeB: 2190 },
+      { size: '512GB', gradeA: 2540, gradeB: 2290 },
+      { size: '1TB', gradeA: 2640, gradeB: 2390 },
     ]
   },
   {
     model: 'iPhone 14',
     capacities: [
-      { size: '128GB', gradeA: 1850, gradeB: 1750 },
+      { size: '128GB', gradeA: 1900, gradeB: 1700 },
+      { size: '256GB', gradeA: 2000, gradeB: 1800 },
+      { size: '512GB', gradeA: 2100, gradeB: 1900 },
+    ]
+  },
+  {
+    model: 'iPhone 14 Plus',
+    capacities: [
+      { size: '128GB', gradeA: 2100, gradeB: 1900 },
+      { size: '256GB', gradeA: 2200, gradeB: 2000 },
+      { size: '512GB', gradeA: 2300, gradeB: 2100 },
     ]
   },
   {
     model: 'iPhone 14 Pro',
     capacities: [
-      { size: '128GB', gradeA: 2400, gradeB: 2300 },
-      { size: '256GB', gradeA: 2500, gradeB: 2350 },
+      { size: '128GB', gradeA: 2450, gradeB: 2200 },
+      { size: '256GB', gradeA: 2700, gradeB: 2450 },
+      { size: '512GB', gradeA: 2800, gradeB: 2550 },
+      { size: '1TB', gradeA: 2900, gradeB: 2650 },
     ]
   },
   {
     model: 'iPhone 14 Pro Max',
     capacities: [
-      { size: '128GB', gradeA: 3050, gradeB: 2950 },
-      { size: '256GB', gradeA: 3150, gradeB: 3000 },
+      { size: '128GB', gradeA: 3000, gradeB: 2750 },
+      { size: '256GB', gradeA: 3100, gradeB: 2850 },
+      { size: '512GB', gradeA: 3200, gradeB: 2950 },
+      { size: '1TB', gradeA: 3300, gradeB: 3050 },
     ]
   },
   {
     model: 'iPhone 15',
     capacities: [
-      { size: '128GB', gradeA: 2550, gradeB: 2450 },
+      { size: '128GB', gradeA: 2550, gradeB: 2350 },
+      { size: '256GB', gradeA: 2650, gradeB: 2450 },
+      { size: '512GB', gradeA: 2750, gradeB: 2550 },
+    ]
+  },
+  {
+    model: 'iPhone 15 Plus',
+    capacities: [
+      { size: '128GB', gradeA: 2750, gradeB: 2550 },
+      { size: '256GB', gradeA: 2850, gradeB: 2650 },
+      { size: '512GB', gradeA: 2950, gradeB: 2750 },
     ]
   },
   {
     model: 'iPhone 15 Pro',
     capacities: [
-      { size: '128GB', gradeA: 3200, gradeB: 3100 },
-      { size: '256GB', gradeA: 3300, gradeB: 3200 },
+      { size: '128GB', gradeA: 3050, gradeB: 2800 },
+      { size: '256GB', gradeA: 3150, gradeB: 2900 },
+      { size: '512GB', gradeA: 3250, gradeB: 3000 },
+      { size: '1TB', gradeA: 3350, gradeB: 3100 },
     ]
   },
   {
     model: 'iPhone 15 Pro Max',
     capacities: [
-      { size: '256GB', gradeA: 3850, gradeB: 3750 },
+      { size: '256GB', gradeA: 3550, gradeB: 3300 },
+      { size: '512GB', gradeA: 3750, gradeB: 3500 },
+      { size: '1TB', gradeA: 3850, gradeB: 3600 },
     ]
   },
   {
     model: 'iPhone 16',
     capacities: [
-      { size: '128GB', gradeA: 2900, gradeB: 2800 },
+      { size: '128GB', gradeA: 3000, gradeB: 2800 },
+      { size: '256GB', gradeA: 3100, gradeB: 2900 },
+      { size: '512GB', gradeA: 3200, gradeB: 3000 },
+    ]
+  },
+  {
+    model: 'iPhone 16 Plus',
+    capacities: [
+      { size: '128GB', gradeA: 3200, gradeB: 3000 },
+      { size: '256GB', gradeA: 3300, gradeB: 3100 },
+      { size: '512GB', gradeA: 3400, gradeB: 3200 },
     ]
   },
   {
     model: 'iPhone 16 Pro',
     capacities: [
-      { size: '128GB', gradeA: 4100, gradeB: 4000 },
-      { size: '256GB', gradeA: 4250, gradeB: 4150 },
+      { size: '128GB', gradeA: 4100, gradeB: 3850 },
+      { size: '256GB', gradeA: 4200, gradeB: 3950 },
+      { size: '512GB', gradeA: 4300, gradeB: 4050 },
+      { size: '1TB', gradeA: 4400, gradeB: 4150 },
     ]
   },
   {
     model: 'iPhone 16 Pro Max',
     capacities: [
-      { size: '256GB', gradeA: 5150, gradeB: 5050 },
+      { size: '256GB', gradeA: 4850, gradeB: 4600 },
+      { size: '512GB', gradeA: 5250, gradeB: 5000 },
+      { size: '1TB', gradeA: 5450, gradeB: 5200 },
     ]
   }
 ];
 
+const calcFitchInstallments = (priceCash: number, price21x: number) => ({
+  price6xTotal: Number((priceCash / (1 - (7.83 / 100))).toFixed(2)),
+  price12xTotal: Number((priceCash / (1 - (12.32 / 100))).toFixed(2)),
+  price18xTotal: Number((priceCash / (1 - (16.37 / 100))).toFixed(2)),
+  price21xTotal: price21x
+});
+
 export const CATALOG: Product[] = [
-  // --- TABELA FITCH 17.01 LACRADO ---
-  { id: 'n_13_128', category: 'iphones_novos', name: '13 128GB - LACRADO', priceCash: 3499, price6xTotal: 3756.53, price12xTotal: 3893.34, price18xTotal: 4014.40, price21xTotal: 4128.82 },
-  { id: 'n_14_128', category: 'iphones_novos', name: '14 128GB - LACRADO', priceCash: 3779, price6xTotal: 4057.13, price12xTotal: 4204.89, price18xTotal: 4335.65, price21xTotal: 4459.22 },
-  { id: 'n_15_128', category: 'iphones_novos', name: '15 128GB - LACRADO', priceCash: 4299, price6xTotal: 4615.41, price12xTotal: 4783.50, price18xTotal: 4932.24, price21xTotal: 5072.82 },
-  { id: 'n_16_128', category: 'iphones_novos', name: '16 128GB - LACRADO', priceCash: 4949, price6xTotal: 5313.25, price12xTotal: 5506.75, price18xTotal: 5677.99, price21xTotal: 5839.82 },
-  { id: 'n_16p_128', category: 'iphones_novos', name: '16 PLUS 128GB - LACRADO', priceCash: 5199, price6xTotal: 5581.65, price12xTotal: 5784.93, price18xTotal: 5964.81, price21xTotal: 6134.82 },
-  { id: 'n_16pro_128', category: 'iphones_novos', name: '16 PRO 128GB - LACRADO', priceCash: 6199, price6xTotal: 6655.25, price12xTotal: 6897.63, price18xTotal: 7112.11, price21xTotal: 7314.82 },
-  { id: 'n_air_256', category: 'iphones_novos', name: 'AIR 256GB GOLD - LACRADO', priceCash: 5999, price6xTotal: 6440.53, price12xTotal: 6675.09, price18xTotal: 6882.65, price21xTotal: 7078.82 },
-  { id: 'n_17_256', category: 'iphones_novos', name: '17 256GB - LACRADO', priceCash: 6099, price6xTotal: 6547.89, price12xTotal: 6786.36, price18xTotal: 6997.38, price21xTotal: 7196.82 },
-  { id: 'n_17pro_256_o', category: 'iphones_novos', name: '17 PRO 256GB LARANJA - LACRADO', priceCash: 8199, price6xTotal: 8802.45, price12xTotal: 9123.03, price18xTotal: 9406.71, price21xTotal: 9674.82 },
-  { id: 'n_17pro_256_s', category: 'iphones_novos', name: '17 PRO 256GB SILVER - LACRADO', priceCash: 8399, price6xTotal: 9017.17, price12xTotal: 9345.57, price18xTotal: 9636.17, price21xTotal: 9910.82 },
-  { id: 'n_17pm_256_o', category: 'iphones_novos', name: '17 PRO MAX 256GB LARANJA- LACRADO', priceCash: 9249, price6xTotal: 9929.73, price12xTotal: 10291.36, price18xTotal: 10611.38, price21xTotal: 10913.82 },
-  { id: 'n_17pm_256_a', category: 'iphones_novos', name: '17 PRO MAX 256GB AZUL - LACRADO', priceCash: 9299, price6xTotal: 9983.41, price12xTotal: 10347.00, price18xTotal: 10668.74, price21xTotal: 10972.82 },
-  { id: 'n_17pm_256_s', category: 'iphones_novos', name: '17 PRO MAX 256GB SILVER - LACRADO', priceCash: 9499, price6xTotal: 10198.13, price12xTotal: 10569.54, price18xTotal: 10898.20, price21xTotal: 11208.82 },
+  // --- iPHONES NOVOS (LACRADOS 05.02) ---
+  { id: 'n_13_128_cpo', category: 'iphones_novos', name: '13 128GB - LACRADO CPO', priceCash: 3099, ...calcFitchInstallments(3099, 3656.82) },
+  { id: 'n_15_128', category: 'iphones_novos', name: '15 128GB - LACRADO', priceCash: 3989, ...calcFitchInstallments(3989, 4707.02) },
+  { id: 'n_16_128', category: 'iphones_novos', name: '16 128GB - LACRADO', priceCash: 4679, ...calcFitchInstallments(4679, 5521.22) },
+  { id: 'n_16p_128', category: 'iphones_novos', name: '16 PLUS 128GB - LACRADO', priceCash: 4929, ...calcFitchInstallments(4929, 5816.22) },
+  { id: 'n_16pro_128', category: 'iphones_novos', name: '16 PRO 128GB - LACRADO', priceCash: 5739, ...calcFitchInstallments(5739, 6772.02) },
+  { id: 'n_air_256', category: 'iphones_novos', name: 'AIR 256GB GOLD - LACRADO', priceCash: 5999, ...calcFitchInstallments(5999, 7078.82) },
+  { id: 'n_17_256', category: 'iphones_novos', name: '17 256GB - LACRADO', priceCash: 5499, ...calcFitchInstallments(5499, 6488.82) },
+  { id: 'n_17p_256_o', category: 'iphones_novos', name: '17 PRO 256GB LARANJA - LACRADO', priceCash: 7529, ...calcFitchInstallments(7529, 8884.22) },
+  { id: 'n_17p_256_a', category: 'iphones_novos', name: '17 PRO 256GB AZUL - LACRADO', priceCash: 8099, ...calcFitchInstallments(8099, 9556.82) },
+  { id: 'n_17p_256_s', category: 'iphones_novos', name: '17 PRO 256GB SILVER - LACRADO', priceCash: 7749, ...calcFitchInstallments(7749, 9143.82) },
+  { id: 'n_17pm_256_o', category: 'iphones_novos', name: '17 PRO MAX 256GB LARANJA- LACRADO', priceCash: 8149, ...calcFitchInstallments(8149, 9615.82) },
+  { id: 'n_17pm_256_a', category: 'iphones_novos', name: '17 PRO MAX 256GB AZUL - LACRADO', priceCash: 8299, ...calcFitchInstallments(8299, 9792.82) },
+  { id: 'n_17pm_256_s', category: 'iphones_novos', name: '17 PRO MAX 256GB SILVER - LACRADO', priceCash: 8399, ...calcFitchInstallments(8399, 9910.82) },
+  { id: 'n_17pm_512_o', category: 'iphones_novos', name: '17 PRO MAX 512GB LARANJA - LACRADO', priceCash: 10149, ...calcFitchInstallments(10149, 11975.82) },
 
-  // --- TABELA FITCH 17.01 SEMINOVO ---
-  { id: 's_11_64', category: 'iphones_seminovos', name: '11 64GB - SEMINOVO', priceCash: 1349, price6xTotal: 1448.29, price12xTotal: 1501.03, price18xTotal: 1547.71, price21xTotal: 1591.82 },
-  { id: 's_11_128', category: 'iphones_seminovos', name: '11 128GB - SEMINOVO', priceCash: 1599, price6xTotal: 1716.69, price12xTotal: 1779.21, price18xTotal: 1834.53, price21xTotal: 1886.82 },
-  { id: 's_11p_64', category: 'iphones_seminovos', name: '11 PRO 64GB - SEMINOVO', priceCash: 1649, price6xTotal: 1770.37, price12xTotal: 1834.84, price18xTotal: 1891.90, price21xTotal: 1945.82 },
-  { id: 's_11pm_64', category: 'iphones_seminovos', name: '11 PRO MAX 64GB - SEMINOVO', priceCash: 1849, price6xTotal: 1985.09, price12xTotal: 2057.38, price18xTotal: 2121.36, price21xTotal: 2181.82 },
-  { id: 's_12_64', category: 'iphones_seminovos', name: '12 64GB - SEMINOVO', priceCash: 1599, price6xTotal: 1716.69, price12xTotal: 1779.21, price18xTotal: 1834.53, price21xTotal: 1886.82 },
-  { id: 's_12_128', category: 'iphones_seminovos', name: '12 128GB - SEMINOVO', priceCash: 1749, price6xTotal: 1877.73, price12xTotal: 1946.11, price18xTotal: 2006.63, price21xTotal: 2063.82 },
-  { id: 's_12pro_128', category: 'iphones_seminovos', name: '12 PRO 128GB - SEMINOVO', priceCash: 2069, price6xTotal: 2221.28, price12xTotal: 2302.18, price18xTotal: 2373.76, price21xTotal: 2441.42 },
-  { id: 's_12pm_128', category: 'iphones_seminovos', name: '12 PRO MAX 128GB - SEMINOVO', priceCash: 2719, price6xTotal: 2919.12, price12xTotal: 3025.43, price18xTotal: 3119.51, price21xTotal: 3208.42 },
-  { id: 's_13_128', category: 'iphones_seminovos', name: '13 128GB - SEMINOVO', priceCash: 2299, price6xTotal: 2468.21, price12xTotal: 2558.10, price18xTotal: 2637.64, price21xTotal: 2712.82 },
-  { id: 's_13pro_128', category: 'iphones_seminovos', name: '13 PRO 128GB - SEMINOVO', priceCash: 2699, price6xTotal: 2897.65, price12xTotal: 3003.18, price18xTotal: 3096.56, price21xTotal: 3184.82 },
-  { id: 's_13pm_128', category: 'iphones_seminovos', name: '13 PRO MAX 128GB - SEMINOVO', priceCash: 2989, price6xTotal: 3208.99, price12xTotal: 3325.86, price18xTotal: 3429.28, price21xTotal: 3527.02 },
-  { id: 's_14_128', category: 'iphones_seminovos', name: '14 128GB - SEMINOVO', priceCash: 2449, price6xTotal: 2629.25, price12xTotal: 2725.00, price18xTotal: 2809.74, price21xTotal: 2889.82 },
-  { id: 's_14pro_128', category: 'iphones_seminovos', name: '14 PRO 128GB - SEMINOVO', priceCash: 3149, price6xTotal: 3380.77, price12xTotal: 3503.89, price18xTotal: 3612.85, price21xTotal: 3715.82 },
-  { id: 's_14pm_128', category: 'iphones_seminovos', name: '14 PRO MAX 128GB - SEMINOVO', priceCash: 3649, price6xTotal: 3917.57, price12xTotal: 4060.24, price18xTotal: 4186.50, price21xTotal: 4305.82 },
-  { id: 's_15_128', category: 'iphones_seminovos', name: '15 128GB - SEMINOVO', priceCash: 3179, price6xTotal: 3412.97, price12xTotal: 3537.27, price18xTotal: 3647.27, price21xTotal: 3751.22 },
-  { id: 's_15pro_128', category: 'iphones_seminovos', name: '15 PRO 128GB - SEMINOVO', priceCash: 4149, price6xTotal: 4454.37, price12xTotal: 4616.59, price18xTotal: 4760.15, price21xTotal: 4895.82 },
-  { id: 's_15pro_256', category: 'iphones_seminovos', name: '15 PRO 256GB - SEMINOVO', priceCash: 4399, price6xTotal: 4722.77, price12xTotal: 4894.77, price18xTotal: 5046.97, price21xTotal: 5190.82 },
-  { id: 's_15pm_256', category: 'iphones_seminovos', name: '15 PRO MAX 256GB - SEMINOVO', priceCash: 4599, price6xTotal: 4937.49, price12xTotal: 5117.31, price18xTotal: 5276.43, price21xTotal: 5426.82 },
-  { id: 's_16pro_128', category: 'iphones_seminovos', name: '16 PRO 128GB - SEMINOVO', priceCash: 4999, price6xTotal: 5366.93, price12xTotal: 5562.39, price18xTotal: 5735.35, price21xTotal: 5898.82 },
-  { id: 's_16pro_256', category: 'iphones_seminovos', name: '16 PRO 256GB - SEMINOVO', priceCash: 5199, price6xTotal: 5581.65, price12xTotal: 5784.93, price18xTotal: 5964.81, price21xTotal: 6134.82 },
-  { id: 's_16pm_256', category: 'iphones_seminovos', name: '16 PRO MAX 256GB - SEMINOVO', priceCash: 6599, price6xTotal: 7084.69, price12xTotal: 7342.71, price18xTotal: 7571.03, price21xTotal: 7786.82 },
+  // --- iPHONES SEMINOVOS (05.02) ---
+  { id: 's_11_64', category: 'iphones_seminovos', name: '11 64GB - SEMINOVO', priceCash: 1349, ...calcFitchInstallments(1349, 1591.82) },
+  { id: 's_11_128', category: 'iphones_seminovos', name: '11 128GB - SEMINOVO', priceCash: 1599, ...calcFitchInstallments(1599, 1886.82) },
+  { id: 's_11_256', category: 'iphones_seminovos', name: '11 256GB - SEMINOVO', priceCash: 1699, ...calcFitchInstallments(1699, 2004.82) },
+  { id: 's_11p_64', category: 'iphones_seminovos', name: '11 PRO 64GB - SEMINOVO', priceCash: 1649, ...calcFitchInstallments(1649, 1945.82) },
+  { id: 's_11pm_64', category: 'iphones_seminovos', name: '11 PRO MAX 64GB - SEMINOVO', priceCash: 1849, ...calcFitchInstallments(1849, 2181.82) },
+  { id: 's_12_64', category: 'iphones_seminovos', name: '12 64GB - SEMINOVO', priceCash: 1749, ...calcFitchInstallments(1749, 2063.82) },
+  { id: 's_12p_128', category: 'iphones_seminovos', name: '12 PRO 128GB - SEMINOVO', priceCash: 2069, ...calcFitchInstallments(2069, 2441.42) },
+  { id: 's_12pm_128', category: 'iphones_seminovos', name: '12 PRO MAX 128GB - SEMINOVO', priceCash: 2579, ...calcFitchInstallments(2579, 3043.22) },
+  { id: 's_13_128', category: 'iphones_seminovos', name: '13 128GB - SEMINOVO', priceCash: 2299, ...calcFitchInstallments(2299, 2712.82) },
+  { id: 's_13p_128', category: 'iphones_seminovos', name: '13 PRO 128GB - SEMINOVO', priceCash: 2689, ...calcFitchInstallments(2689, 3173.02) },
+  { id: 's_13pm_128', category: 'iphones_seminovos', name: '13 PRO MAX 128GB - SEMINOVO', priceCash: 2999, ...calcFitchInstallments(2999, 3538.82) },
+  { id: 's_14_128', category: 'iphones_seminovos', name: '14 128GB - SEMINOVO', priceCash: 2499, ...calcFitchInstallments(2499, 2948.82) },
+  { id: 's_14p_128', category: 'iphones_seminovos', name: '14 PRO 128GB - SEMINOVO', priceCash: 3149, ...calcFitchInstallments(3149, 3715.82) },
+  { id: 's_14pm_128', category: 'iphones_seminovos', name: '14 PRO MAX 128GB - SEMINOVO', priceCash: 3649, ...calcFitchInstallments(3649, 4305.82) },
+  { id: 's_15_128', category: 'iphones_seminovos', name: '15 128GB - SEMINOVO', priceCash: 3179, ...calcFitchInstallments(3179, 3751.22) },
+  { id: 's_15p_128', category: 'iphones_seminovos', name: '15 PRO 128GB - SEMINOVO', priceCash: 3699, ...calcFitchInstallments(3699, 4364.82) },
+  { id: 's_15pm_256', category: 'iphones_seminovos', name: '15 PRO MAX 256GB - SEMINOVO', priceCash: 4599, ...calcFitchInstallments(4599, 5426.82) },
+  { id: 's_16p_128', category: 'iphones_seminovos', name: '16 PRO 128GB - SEMINOVO', priceCash: 4999, ...calcFitchInstallments(4999, 5898.82) },
+  { id: 's_16pm_256', category: 'iphones_seminovos', name: '16 PRO MAX 256GB - SEMINOVO', priceCash: 6499, ...calcFitchInstallments(6499, 7668.82) },
 
-  // --- TABELA FITCH 17.01 PRODUTOS APPLE ---
-  { id: 'ap_max', category: 'apple', name: 'AIRPODS MAX - LACRADO', priceCash: 4399, price6xTotal: 4722.77, price12xTotal: 4894.77, price18xTotal: 5046.97, price21xTotal: 5190.82 },
-  { id: 'aw_se2_40', category: 'apple', name: 'APPLE WATCH SE 2ºGER 40MM - LACRADO', priceCash: 1849, price6xTotal: 1985.09, price12xTotal: 2057.38, price18xTotal: 2121.36, price21xTotal: 2181.82 },
-  { id: 'aw_se2_44', category: 'apple', name: 'APPLE WATCH SE 2ºGER 44MM - LACRADO', priceCash: 1949, price6xTotal: 2092.45, price12xTotal: 2168.65, price18xTotal: 2236.09, price21xTotal: 2299.82 },
-  { id: 'aw_se3_40', category: 'apple', name: 'APPLE WATCH SE 3ºGER 40MM - LACRADO', priceCash: 2099, price6xTotal: 2253.49, price12xTotal: 2335.56, price18xTotal: 2408.18, price21xTotal: 2476.82 },
-  { id: 'aw_se3_44', category: 'apple', name: 'APPLE WATCH SE 3ºGER 44MM - LACRADO', priceCash: 2299, price6xTotal: 2468.21, price12xTotal: 2558.10, price18xTotal: 2637.64, price21xTotal: 2712.82 },
-  { id: 'aw_s11_42', category: 'apple', name: 'APPLE WATCH S11 42MM - LACRADO', priceCash: 2949, price6xTotal: 3166.05, price12xTotal: 3281.35, price18xTotal: 3383.39, price21xTotal: 3479.82 },
-  { id: 'aw_s11_46', category: 'apple', name: 'APPLE WATCH S11 46MM - LACRADO', priceCash: 3249, price6xTotal: 3488.13, price12xTotal: 3615.16, price18xTotal: 3727.58, price21xTotal: 3833.82 },
-  { id: 'mb_m2_256', category: 'apple', name: 'MACBOOK M2 256GB/16RAM', priceCash: 5599, price6xTotal: 6011.09, price12xTotal: 6230.01, price18xTotal: 6423.73, price21xTotal: 6606.82 },
-  { id: 'ipad_11_128', category: 'apple', name: 'IPAD 11 A16 128GB - LACRADO', priceCash: 2899, price6xTotal: 3112.37, price12xTotal: 3225.72, price18xTotal: 3326.02, price21xTotal: 3420.82 },
-  { id: 'ap_penc_2', category: 'apple', name: 'APPLE PENCIL 2º GERAÇÃO', priceCash: 989, price6xTotal: 1061.79, price12xTotal: 1100.46, price18xTotal: 1134.68, price21xTotal: 1167.02 },
-  { id: 'at_pack4', category: 'apple', name: 'AIRTAG PACK C/4', priceCash: 819, price6xTotal: 879.28, price12xTotal: 911.30, price18xTotal: 939.64, price21xTotal: 966.42 },
-  { id: 'ap_tv_4k', category: 'apple', name: 'APPLE TV 4K', priceCash: 1299, price6xTotal: 1394.61, price12xTotal: 1445.40, price18xTotal: 1490.34, price21xTotal: 1532.82 },
+  // --- PRODUTOS APPLE (05.02) ---
+  { id: 'ap_max_l', category: 'apple', name: 'AIRPODS MAX - LACRADO', priceCash: 4399, ...calcFitchInstallments(4399, 5190.82) },
+  { id: 'ap_pro3_l', category: 'apple', name: 'AIRPODS PRO 3GER - LACRADO', priceCash: 1799, ...calcFitchInstallments(1799, 2122.82) },
+  { id: 'aw_se2_40_l', category: 'apple', name: 'WATCH SE 2ºGER 40MM - LACRADO', priceCash: 1589, ...calcFitchInstallments(1589, 1875.02) },
+  { id: 'aw_se2_44_l', category: 'apple', name: 'WATCH SE 2ºGER 44MM - LACRADO', priceCash: 1949, ...calcFitchInstallments(1949, 2299.82) },
+  { id: 'aw_se3_40_l', category: 'apple', name: 'WATCH SE 3ºGER 40MM - LACRADO', priceCash: 2099, ...calcFitchInstallments(2099, 2476.82) },
+  { id: 'aw_se3_44_l', category: 'apple', name: 'WATCH SE 3ºGER 44MM - LACRADO', priceCash: 2299, ...calcFitchInstallments(2299, 2712.82) },
+  { id: 'aw_s11_42_l', category: 'apple', name: 'WATCH S11 42MM - LACRADO', priceCash: 2949, ...calcFitchInstallments(2949, 3479.82) },
+  { id: 'aw_s11_46_l', category: 'apple', name: 'WATCH S11 46MM - LACRADO', priceCash: 3249, ...calcFitchInstallments(3249, 3833.82) },
+  { id: 'mb_m1_13', category: 'apple', name: 'MACBOOK M1 256GB 13"', priceCash: 4599, ...calcFitchInstallments(4599, 5426.82) },
+  { id: 'mb_m2_16', category: 'apple', name: 'MACBOOK M2 256GB/16RAM', priceCash: 5599, ...calcFitchInstallments(5599, 6606.82) },
+  { id: 'ipad_11_128', category: 'apple', name: 'IPAD 11 A16 128GB - LACRADO', priceCash: 2839, ...calcFitchInstallments(2839, 3350.02) },
+  { id: 'ap_pencil2', category: 'apple', name: 'APPLE PENCIL 2º GERAÇÃO', priceCash: 989, ...calcFitchInstallments(989, 1167.02) },
+  { id: 'ap_airtag4', category: 'apple', name: 'AIRTAG PACK C/4', priceCash: 819, ...calcFitchInstallments(819, 966.42) },
+  { id: 'ap_tv_4k', category: 'apple', name: 'APPLE TV 4K', priceCash: 1299, ...calcFitchInstallments(1299, 1532.82) },
 
-  // --- TABELA FITCH 17.01 ANDROID ---
-  { id: 'an_red_a5', category: 'android', name: 'XIAOMI REDMI A5 128GB/4GB', priceCash: 839, price6xTotal: 900.75, price12xTotal: 940.51, price18xTotal: 962.58, price21xTotal: 990.02 },
-  { id: 'an_red_15c', category: 'android', name: 'XIAOMI REDMI 15C 256GB/8GB', priceCash: 1089, price6xTotal: 1169.15, price12xTotal: 1220.76, price18xTotal: 1249.41, price21xTotal: 1285.02 },
-  { id: 'an_note14_256', category: 'android', name: 'XIAOMI NOTE 14 256GB/8RAM - LACRADO', priceCash: 1389, price6xTotal: 1491.23, price12xTotal: 1557.06, price18xTotal: 1593.60, price21xTotal: 1639.02 },
-  { id: 'an_note14pp_256', category: 'android', name: 'XIAOMI NOTE 14 PRO PLUS 256GB/8RAM 5G - LACRADO', priceCash: 2439, price6xTotal: 2618.51, price12xTotal: 2734.11, price18xTotal: 2798.26, price21xTotal: 2878.02 },
-  { id: 'an_poco_c71', category: 'android', name: 'XIAOMI POCO C71 128GB/4RAM - LACRADO', priceCash: 889, price6xTotal: 954.43, price12xTotal: 996.56, price18xTotal: 1019.95, price21xTotal: 1049.02 },
-  { id: 'an_poco_c85', category: 'android', name: 'XIAOMI POCO C85 256GB/12RAM C/NFC- LACRADO', priceCash: 1099, price6xTotal: 1179.89, price12xTotal: 1231.97, price18xTotal: 1260.88, price21xTotal: 1296.82 },
-  { id: 'an_poco_x7_512', category: 'android', name: 'XIAOMI POCO X7 512/12RAM - LACRADO', priceCash: 1949, price6xTotal: 2092.45, price12xTotal: 2184.82, price18xTotal: 2236.09, price21xTotal: 2299.82 },
-  { id: 'an_poco_x7pro_512', category: 'android', name: 'XIAOMI POCO X7 PRO 512GB/12RAM -LC', priceCash: 2539, price6xTotal: 2725.87, price12xTotal: 2846.21, price18xTotal: 2912.99, price21xTotal: 2996.02 },
-  { id: 'an_poco_f7_512', category: 'android', name: 'XIAOMI POCO F7 512GB/12RAM -LC', priceCash: 3249, price6xTotal: 3488.13, price12xTotal: 3642.11, price18xTotal: 3727.58, price21xTotal: 3833.82 },
-  { id: 'an_real_n60', category: 'android', name: 'REALME NOTE 60 128GB/4RAM', priceCash: 839, price6xTotal: 900.75, price12xTotal: 940.51, price18xTotal: 962.58, price21xTotal: 990.02 },
-  { id: 'an_real_t14', category: 'android', name: 'REALME T14 256GB/8RAM', priceCash: 1769, price6xTotal: 1899.20, price12xTotal: 1983.04, price18xTotal: 2029.57, price21xTotal: 2087.42 },
-  { id: 'an_real_12p', category: 'android', name: 'REALME 12 PRO PLUS 512GB/8GB', priceCash: 2409, price6xTotal: 2586.30, price12xTotal: 2700.48, price18xTotal: 2763.85, price21xTotal: 2842.62 },
-  { id: 'an_umi_90a', category: 'android', name: 'UMIDIGI NOTE 90A 64GB/4RAM', priceCash: 719, price6xTotal: 771.92, price12xTotal: 806.00, price18xTotal: 824.91, price21xTotal: 848.42 },
-  { id: 'an_umi_90c', category: 'android', name: 'UMIDIGI NOTE 90C 64GB/4RAM', priceCash: 889, price6xTotal: 954.43, price12xTotal: 996.56, price18xTotal: 1019.95, price21xTotal: 1049.02 },
-  { id: 'an_red_14c', category: 'android', name: 'REDMI 14C 256GB - SEMINOVO', priceCash: 749, price6xTotal: 804.13, price12xTotal: 839.63, price18xTotal: 859.33, price21xTotal: 883.82 },
-  { id: 'an_red_note13pro', category: 'android', name: 'REDMI NOTE 13 PRO 256GB/8RAM - SEMINOVO', priceCash: 1399, price6xTotal: 1501.97, price12xTotal: 1568.27, price18xTotal: 1605.07, price21xTotal: 1650.82 },
-  { id: 'an_poco_c75', category: 'android', name: 'POCO C75 256GB/8RAM - SEMINOVO', priceCash: 999, price6xTotal: 1072.53, price12xTotal: 1119.87, price18xTotal: 1146.15, price21xTotal: 1178.82 },
+  // --- ANDROID (05.02) ---
+  { id: 'an_red_a5', category: 'android', name: 'XIAOMI REDMI A5 128GB/4GB', priceCash: 859, ...calcFitchInstallments(859, 1013.62) },
+  { id: 'an_red_15c', category: 'android', name: 'XIAOMI REDMI 15C 256GB/8GB', priceCash: 1089, ...calcFitchInstallments(1089, 1285.02) },
+  { id: 'an_note_14_256', category: 'android', name: 'XIAOMI NOTE 14 256GB/8RAM - LACRADO', priceCash: 1369, ...calcFitchInstallments(1369, 1615.42) },
+  { id: 'an_note_14p_256', category: 'android', name: 'XIAOMI NOTE 14 PRO 256GB/8RAM 5G - LACRADO', priceCash: 1949, ...calcFitchInstallments(1949, 2299.82) },
+  { id: 'an_note_14pp_256', category: 'android', name: 'XIAOMI NOTE 14 PRO PLUS 256GB/8RAM 5G - LACRADO', priceCash: 2439, ...calcFitchInstallments(2439, 2878.02) },
+  { id: 'an_note_15_256', category: 'android', name: 'XIAOMI NOTE 15 256GB/8RAM 5G - LACRADO', priceCash: 1519, ...calcFitchInstallments(1519, 1792.42) },
+  { id: 'an_poco_c71', category: 'android', name: 'XIAOMI POCO C71 128GB/4RAM - LACRADO', priceCash: 899, ...calcFitchInstallments(899, 1060.82) },
+  { id: 'an_poco_c85', category: 'android', name: 'XIAOMI POCO C85 256GB/12RAM C/NFC- LACRADO', priceCash: 1119, ...calcFitchInstallments(1119, 1320.42) },
+  { id: 'an_poco_x7_256', category: 'android', name: 'XIAOMI POCO X7 256GB/8RAM - LACRADO', priceCash: 1749, ...calcFitchInstallments(1749, 2063.82) },
+  { id: 'an_poco_x7p_512', category: 'android', name: 'XIAOMI POCO X7 PRO 512GB/12RAM -LC', priceCash: 2399, ...calcFitchInstallments(2399, 2830.82) },
+  { id: 'an_poco_f7_512', category: 'android', name: 'XIAOMI POCO F7 512GB/12RAM -LC', priceCash: 3249, ...calcFitchInstallments(3249, 3833.82) },
+  { id: 'an_real_t14', category: 'android', name: 'REALME T14 256GB/8RAM', priceCash: 1769, ...calcFitchInstallments(1769, 2087.42) },
+  { id: 'an_real_12pp', category: 'android', name: 'REALME 12 PRO PLUS 512GB/8GB', priceCash: 2409, ...calcFitchInstallments(2409, 2842.62) },
+  { id: 'an_umi_90a', category: 'android', name: 'UMIDIGI NOTE 90A 64GB/4RAM', priceCash: 719, ...calcFitchInstallments(719, 848.42) },
+  { id: 'an_umi_90c', category: 'android', name: 'UMIDIGI NOTE 90C 64GB/4RAM', priceCash: 889, ...calcFitchInstallments(889, 1049.02) },
+  { id: 'an_red_14c_s', category: 'android', name: 'REDMI 14C 256GB - SEMINOVO', priceCash: 749, ...calcFitchInstallments(749, 883.82) },
+  { id: 'an_red_note13p_s', category: 'android', name: 'REDMI NOTE 13 PRO 256GB/8RAM - SEMINOVO', priceCash: 1399, ...calcFitchInstallments(1399, 1650.82) },
+  { id: 'an_poco_c75_s', category: 'android', name: 'POCO C75 256GB/8RAM - SEMINOVO', priceCash: 999, ...calcFitchInstallments(999, 1178.82) },
 
-  // --- TABELA FITCH 17.01 ELETRÔNICOS ---
-  { id: 'el_ps5_825', category: 'eletronicos', name: 'VIDEOGAME PS5 825 C/JOGO', priceCash: 3529, price6xTotal: 3788.73, price12xTotal: 3955.99, price18xTotal: 4048.82, price21xTotal: 4164.22 },
-  { id: 'el_xbox_s', category: 'eletronicos', name: 'VIDEOGAME XBOX - S 512GB', priceCash: 2999, price6xTotal: 3219.73, price12xTotal: 3361.86, price18xTotal: 3440.75, price21xTotal: 3538.82 },
-  { id: 'el_n_switch', category: 'eletronicos', name: 'VIDEOGAME NINTENDO SWITC', priceCash: 1399, price6xTotal: 1501.97, price12xTotal: 1568.27, price18xTotal: 1605.07, price21xTotal: 1650.82 },
-  { id: 'el_ctrl_ps5', category: 'eletronicos', name: 'CONTROLE PS5', priceCash: 559, price6xTotal: 600.14, price12xTotal: 626.64, price18xTotal: 641.34, price21xTotal: 659.62 },
-  { id: 'el_galaxy_tab_a9', category: 'eletronicos', name: 'GALAXY TAB A9 64GB CHIP + WIFI PRETO - LACRADO', priceCash: 1059, price6xTotal: 1136.94, price12xTotal: 1187.13, price18xTotal: 1214.99, price21xTotal: 1249.62 },
-  { id: 'el_tablet_pos', category: 'eletronicos', name: 'TABLET POSITIVO 7"', priceCash: 569, price6xTotal: 610.88, price12xTotal: 637.85, price18xTotal: 652.81, price21xTotal: 671.42 },
-  { id: 'el_starlink', category: 'eletronicos', name: 'ANTENA STARLINK', priceCash: 2299, price6xTotal: 2468.21, price12xTotal: 2577.17, price18xTotal: 2637.64, price21xTotal: 2712.82 },
-  { id: 'el_dji_mini', category: 'eletronicos', name: 'DRONE DJI MINI 4K - 1 CONTROLE - 1 BATERIA', priceCash: 3049, price6xTotal: 3273.41, price12xTotal: 3417.91, price18xTotal: 3498.12, price21xTotal: 3597.82 },
+  // --- ELETRÔNICOS (05.02) ---
+  { id: 'el_ps5_1t', category: 'eletronicos', name: 'VIDEOGAME PS5 1TR S/JOGO', priceCash: 3349, ...calcFitchInstallments(3349, 3951.82) },
+  { id: 'el_xbox_s', category: 'eletronicos', name: 'VIDEOGAME XBOX -S 512GB', priceCash: 2999, ...calcFitchInstallments(2999, 3538.82) },
+  { id: 'el_switch', category: 'eletronicos', name: 'VIDEOGAME NINTENDO SWITC', priceCash: 1399, ...calcFitchInstallments(1399, 1650.82) },
+  { id: 'el_ps5_ctrl', category: 'eletronicos', name: 'CONTROLE PS5', priceCash: 559, ...calcFitchInstallments(559, 659.62) },
+  { id: 'el_tab_a9', category: 'eletronicos', name: 'GALAXY TAB A9 64GB CHIP + WIFI PRETO - LACRADO', priceCash: 1059, ...calcFitchInstallments(1059, 1249.62) },
+  { id: 'el_tab_pos', category: 'eletronicos', name: 'TABLET POSITIVO 7"', priceCash: 569, ...calcFitchInstallments(569, 671.42) },
+  { id: 'el_tab_red_pad2', category: 'eletronicos', name: 'TABLET REDMI PAD 2 256GB/8RAM', priceCash: 1449, ...calcFitchInstallments(1449, 1709.82) },
+  { id: 'el_starlink', category: 'eletronicos', name: 'ANTENA STARLINK', priceCash: 2299, ...calcFitchInstallments(2299, 2712.82) },
+  { id: 'el_dji_mini_4k', category: 'eletronicos', name: 'DRONE DJI MINI 4K - 1 CONTROLE - 1 BATERIA', priceCash: 3049, ...calcFitchInstallments(3049, 3597.82) },
 
   // --- ACESSÓRIOS ---
-  { id: 'acc_c1', category: 'acessorios', name: 'FONTE USB-C ORIGINAL APPLE', priceCash: 219, price6xTotal: 235.12, price12xTotal: 243.68, price18xTotal: 251.26, price21xTotal: 260 },
-  { id: 'acc_cs1', category: 'acessorios', name: 'CASE ORIGINAL APPLE', priceCash: 30, price6xTotal: 32.21, price12xTotal: 33.38, price18xTotal: 34.42, price21xTotal: 35 },
+  { id: 'ac_f_orig', category: 'acessorios', name: 'FONTE USB-C ORIGINAL APPLE', priceCash: 219, ...calcFitchInstallments(219, 260) },
+  { id: 'ac_f_1l', category: 'acessorios', name: 'FONTE USB-C 1ºLINHA', priceCash: 135, ...calcFitchInstallments(135, 160) },
+  { id: 'ac_c_2m_orig', category: 'acessorios', name: 'CABO 2M ORIGINAL LIGHT', priceCash: 249, ...calcFitchInstallments(249, 300) },
+  { id: 'ac_c_1m_orig', category: 'acessorios', name: 'CABO 1M ORIGINAL', priceCash: 199, ...calcFitchInstallments(199, 240) },
+  { id: 'ac_c_prem', category: 'acessorios', name: 'CABO USB-C APPLE PREMIUM', priceCash: 99, ...calcFitchInstallments(99, 120) },
+  { id: 'ac_p_3d', category: 'acessorios', name: 'PELÍCULA 3D', priceCash: 25, ...calcFitchInstallments(25, 30) },
+  { id: 'ac_case_orig', category: 'acessorios', name: 'CASE ORIGINAL', priceCash: 30, ...calcFitchInstallments(30, 35) },
+  { id: 'ac_case_magsafe', category: 'acessorios', name: 'CASE MAGSAFE TRANSPARENTE', priceCash: 40, ...calcFitchInstallments(40, 50) },
 ];

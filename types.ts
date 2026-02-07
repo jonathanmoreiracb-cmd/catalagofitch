@@ -1,4 +1,5 @@
 
+
 export interface Product {
   id: string;
   name: string;
@@ -23,6 +24,14 @@ export interface TradeInModel {
     gradeA: number; // Sem detalhes
     gradeB: number; // Abaixo de 85% ou marcas
   }[];
+}
+
+// Added TradeInEntry interface to be shared between components
+export interface TradeInEntry {
+  id: string;
+  model: string;
+  capacity: string;
+  condition: 'A' | 'B';
 }
 
 export interface SimulationState {
